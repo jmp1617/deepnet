@@ -24,13 +24,13 @@ int check_args( char* argv[] ){
     //check # data: if it is a number greater than 0
     for( unsigned int c = 0; c < strlen( argv[2] ); c++ ){
         if( !isdigit( argv[2][c] ) ){
-            fprintf( stderr, "# data parameter must be a number greater than 0\n\n");
+            fprintf( stderr, "# data parameter must be a number greater than 0\n\n" );
             print_usage();
             return 1;
         }
     }
     if( strtol( argv[2], NULL, 10 ) < 1 ){
-        fprintf( stderr, "# data must be greater than 0\n\n");
+        fprintf( stderr, "# data must be greater than 0\n\n" );
         print_usage();
         return 1;
     }
@@ -38,16 +38,31 @@ int check_args( char* argv[] ){
     //check size: if it is a number greater than 0
     for( unsigned int c = 0; c < strlen( argv[3] ); c++ ){
         if( !isdigit( argv[3][c] ) ){
-            fprintf( stderr, "size parameter must be a number greater than 0\n\n");
+            fprintf( stderr, "size parameter must be a number greater than 0\n\n" );
             print_usage();
             return 1;
         }
     }
     if( strtol( argv[3], NULL, 10 ) < 1 ){
-        fprintf( stderr, "size must be greater than 0\n\n");
+        fprintf( stderr, "size must be greater than 0\n\n" );
+        print_usage();
+        return 1;
+    }
+
+    //check file: make sure filename is less than 50 chars long
+    if( strlen( argv[4] ) > 49 ){
+        fprintf( stderr, "File name cannot exceed 50 characters\n\n" );
         print_usage();
         return 1;
     }
 
     return 0;
 }
+
+int train_mode(Options o){
+    return 0;
+}
+
+int analyze_mode(Options o){
+    return 0;
+}   

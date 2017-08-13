@@ -3,6 +3,7 @@
 //
 
 #include "deepnet.h"
+#include <string.h>
 
 int main( int argc, char* argv[] ){
     
@@ -15,6 +16,25 @@ int main( int argc, char* argv[] ){
     if( check_args( argv ) ){
         return 1;
     }
+
+    //set options
+    Options o = malloc( sizeof( Options_s ) );
+    
+    o->mode = argv[1][0];
+    o->numdata = strtol( argv[2], NULL, 10 );
+    o->size = strtol( argv[3], NULL, 10 );
+    o->file = malloc( sizeof( char ) * 50 );
+    memcpy( o->file, argv[4], strlen( argv[4] ) + 1 );
+
+    //select runtype
+    if( o->mode == 't' ) //train
+        train_mode( o );
+    else
+        analyze_mode( o );
+    
+    //cleanup
+    free( o );
+    free( o->file );
 
     return 0;
 }
