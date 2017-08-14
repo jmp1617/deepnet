@@ -8,7 +8,7 @@ void print_usage( void ){
     fprintf( stderr, "Usage: deepnet [mode] [# data] [size] [neurons.brain]\n \
             \tmode: [t/a] either a 't' to specify training mode or 'a' to analyze\n \
             \t# data:  number of data for training or analysis\n \
-            \tsize: the size in bits of the largest data (including solution flag and length byte).\n \
+            \tsize: the length of the largest data (including solution flag and length header if training).\n \
             \tneurons.brain: file to dump neurons to after training or load neurons for analysis.\n" );
 }
 
@@ -59,10 +59,48 @@ int check_args( char* argv[] ){
     return 0;
 }
 
+void get_input( char input[], int size ){
+    while( !fgets( input, size+1, stdin) );
+}
+
+void extract_data( TData d, char input_buffer[], int size ){
+    d->data = malloc( sizeof( int ) * (size - 1 ) );
+    for( int bit = 0; bit < size - 1; bit++){
+        if( input_buffer[bit] == '1' )
+            d->data[bit] = 1;
+        else
+            d->data[bit] = 0;
+    }
+    if( input_buffer[size-1] == '1' )
+        d->solution = 1;
+    else
+        d->solution = 0;
+}
+
 int train_mode(Options o){
-    return 0;
+    
+    //create train data input buffer based on largest size
+    char input_buffer[o->size+1];
+    
+    //zero out the buffer
+    for( int cell = 0; cell < o->size; cell++)
+        input_buffer[ cell ] = 0;
+    
+    //get the input from stdin
+    get_input( input_buffer, o->size );
+
+    //extract data length, solution flag, and data
+    TData d = malloc( sizeof( TData_s ) );
+    extract_data( d, input_buffer, o->size );
+
+    //begin training
+
+    //cleanup
+    free( d );
+    free( d->data );
+
 }
 
 int analyze_mode(Options o){
     return 0;
-}   
+}

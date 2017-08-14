@@ -1,4 +1,5 @@
 deepnet
+*.txt
 
 # Prerequisites
 *.d

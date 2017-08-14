@@ -14,6 +14,14 @@ typedef struct{
 
 typedef Options_s* Options;
 
+//struct to represent training data
+typedef struct{
+    int solution;
+    int* data;
+} TData_s;
+
+typedef TData_s* TData;
+
 //prints the usage message
 void print_usage( void );
 
@@ -25,5 +33,14 @@ int train_mode(Options o);
 
 //analyze mode
 int analyze_mode(Options o);
+
+//sigmoid function
+double sigmoid( double input, int derivative );
+
+//get input from stdin
+void get_input( char input[], int size );
+
+//extract size and solution
+void extract_data( TData d, char input_buffer[], int size );
 
 #endif
