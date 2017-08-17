@@ -26,9 +26,14 @@ int main( int argc, char* argv[] ){
     o->file = malloc( sizeof( char ) * 50 );
     memcpy( o->file, argv[4], strlen( argv[4] ) + 1 );
 
+    //init synapse storage
+    SynStore s = malloc( sizeof( SynStore_s ) );
+    s->synapse0 = malloc( sizeof( double ) * o->size - 1 );
+    init_syn0(s->synapse0, o->size - 1);
+
     //select runtype
     if( o->mode == 't' ) //train
-        train_mode( o );
+        train_mode( o, s );
     else
         analyze_mode( o );
     

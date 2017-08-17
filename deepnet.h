@@ -10,6 +10,7 @@ typedef struct{
     int numdata;
     int size;
     char* file;
+    int trains;
 } Options_s;
 
 typedef Options_s* Options;
@@ -22,6 +23,13 @@ typedef struct{
 
 typedef TData_s* TData;
 
+//synapse storage
+typedef struct{
+    double* synapse0;
+} SynStore_s;
+
+typedef SynStore_s* SynStore;
+
 //prints the usage message
 void print_usage( void );
 
@@ -29,7 +37,7 @@ void print_usage( void );
 int check_args( char* argv[] );
 
 //train routine
-int train_mode(Options o);
+int train_mode(Options o, SynStore s);
 
 //analyze mode
 int analyze_mode(Options o);

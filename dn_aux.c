@@ -10,7 +10,7 @@ void print_usage( void ){
             \tmode: [t/a] either a 't' to specify training mode or 'a' to analyze\n \
             \t# data:  number of data for training or analysis\n \
             \tsize: the length of the largest data (including solution flag and length header if training).\n \
-            \tneurons.brain: file to dump neurons to after training or load neurons for analysis.\n" );
+            \tneurons.brain: file to dump neurons to after training or load neurons for analysis\n" );
 }
 
 int check_args( char* argv[] ){
@@ -86,7 +86,7 @@ void init_syn0( double syn0[], int size ){
     }
 }
 
-int train_mode(Options o){
+int train_mode(Options o, SynStore s){
     
     //create train data input buffer based on largest size
     char input_buffer[o->size+1];
@@ -102,13 +102,9 @@ int train_mode(Options o){
     TData d = malloc( sizeof( TData_s ) );
     extract_data( d, input_buffer, o->size );
 
-    //begin training
-    //initialize synapse
-    double synapse0[ o->size - 1 ];
-    init_syn0( synapse0, o->size - 1 );
-    
+    //begin training    
     //forward propegation
-    double layer1 = sigmoid( vv( synapse0, d->data, o->size - 1 ), 0 );
+    double layer1 = sigmoid( vv( s->synapse0, d->data, o->size - 1 ), 0 );
     printf("Layer1: %f\n", layer1);
 
     //get error
