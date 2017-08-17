@@ -113,11 +113,11 @@ int train_mode(Options o, SynStore s){
         for(int cell = 0; cell < o->size-1; cell++){
             printf("%c, ",input_buffer[cell]);
         }
-        printf("]\n");
 
         //extract data length, solution flag, and data
         TData d = malloc( sizeof( TData_s ) );
         extract_data( d, input_buffer, o->size );
+        printf("%f]\n",d->solution);
 
         //begin training    
         //forward propegation

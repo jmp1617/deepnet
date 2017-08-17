@@ -7,7 +7,7 @@
 double sigmoid( double input, int derivative ){
     if( derivative )
         return input * ( 1 - input );
-    return 1 / ( 1 + exp( input ) );
+    return 1 / ( 1 + exp( -input ) );
 }
 
 double vv( double v1[], double v2[], int size ){
