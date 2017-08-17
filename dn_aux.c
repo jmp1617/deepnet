@@ -108,11 +108,24 @@ int train_mode(Options o, SynStore s){
     printf("Layer1: %f\n", layer1);
 
     //get error
-    
+    double error = d->solution - layer1;
+    printf("Error: %f\n", error);
+
+    //correct synapse
+    //if neural net is really sure alter less but if its not alter more using sigmoid derivative
+    double layer1_delta = error * sigmoid( layer1, 1 );
+    printf("L1 Delta: %f\n", layer1_delta);
+    for(int bit = 0; bit < o->size - 1; bit++){
+        if( d->data[bit] = 0 )
+            s->synapse0[bit] += 0.0;
+        else{
+            s->synapse0[bit] += layer1_delta;
+        }
+    }
 
     //cleanup
-    free( d );
     free( d->data );
+    free( d );
 
 }
 

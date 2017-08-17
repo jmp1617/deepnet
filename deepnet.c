@@ -38,8 +38,10 @@ int main( int argc, char* argv[] ){
         analyze_mode( o );
     
     //cleanup
-    free( o );
     free( o->file );
+    free( o );
+    free( s->synapse0 );
+    free( s );
 
     return 0;
 }
