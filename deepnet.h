@@ -43,4 +43,7 @@ void get_input( char input[], int size );
 //extract size and solution
 void extract_data( TData d, char input_buffer[], int size );
 
+//fill the synapse with random numbers mean 0
+void init_syn0( double syn0[], int size );
+
 #endif

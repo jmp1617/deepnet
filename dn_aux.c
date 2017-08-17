@@ -3,6 +3,7 @@
 #include "deepnet.h"
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 void print_usage( void ){
     fprintf( stderr, "Usage: deepnet [mode] [# data] [size] [neurons.brain]\n \
@@ -77,6 +78,13 @@ void extract_data( TData d, char input_buffer[], int size ){
         d->solution = 0;
 }
 
+void init_syn0( double syn0[], int size ){
+    srand((unsigned) time(NULL));
+    for( int cell = 0; cell < size; cell++ ){
+        syn0[cell] = (double)rand()/RAND_MAX*2.0-1.0;
+    }
+}
+
 int train_mode(Options o){
     
     //create train data input buffer based on largest size
@@ -94,6 +102,10 @@ int train_mode(Options o){
     extract_data( d, input_buffer, o->size );
 
     //begin training
+    //initialize synapse
+    double synapse0[ o->size - 1 ];
+    init_syn0( synapse0, o->size - 1 );
+    
 
     //cleanup
     free( d );
