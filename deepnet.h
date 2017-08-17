@@ -16,8 +16,8 @@ typedef Options_s* Options;
 
 //struct to represent training data
 typedef struct{
-    int solution;
-    int* data;
+    double solution;
+    double* data;
 } TData_s;
 
 typedef TData_s* TData;
@@ -34,9 +34,6 @@ int train_mode(Options o);
 //analyze mode
 int analyze_mode(Options o);
 
-//sigmoid function
-double sigmoid( double input, int derivative );
-
 //get input from stdin
 void get_input( char input[], int size );
 
@@ -45,5 +42,12 @@ void extract_data( TData d, char input_buffer[], int size );
 
 //fill the synapse with random numbers mean 0
 void init_syn0( double syn0[], int size );
+
+///Math
+//sigmoid function
+double sigmoid( double input, int derivative );
+
+//vector vector dot product
+double vv( double v1[], double v2[], int size );
 
 #endif

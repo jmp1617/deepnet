@@ -64,18 +64,19 @@ void get_input( char input[], int size ){
     while( !fgets( input, size+1, stdin) );
 }
 
+//char data extraction : TODO : raw binary extraction
 void extract_data( TData d, char input_buffer[], int size ){
-    d->data = malloc( sizeof( int ) * (size - 1 ) );
+    d->data = malloc( sizeof( double ) * (size - 1 ) );
     for( int bit = 0; bit < size - 1; bit++){
         if( input_buffer[bit] == '1' )
-            d->data[bit] = 1;
+            d->data[bit] = 1.0;
         else
-            d->data[bit] = 0;
+            d->data[bit] = 0.0;
     }
     if( input_buffer[size-1] == '1' )
-        d->solution = 1;
+        d->solution = 1.0;
     else
-        d->solution = 0;
+        d->solution = 0.0;
 }
 
 void init_syn0( double syn0[], int size ){
@@ -105,6 +106,12 @@ int train_mode(Options o){
     //initialize synapse
     double synapse0[ o->size - 1 ];
     init_syn0( synapse0, o->size - 1 );
+    
+    //forward propegation
+    double layer1 = sigmoid( vv( synapse0, d->data, o->size - 1 ), 0 );
+    printf("Layer1: %f\n", layer1);
+
+    //get error
     
 
     //cleanup
