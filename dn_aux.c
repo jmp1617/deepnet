@@ -61,7 +61,9 @@ int check_args( char* argv[] ){
 }
 
 void get_input( char input[], int size ){
-    while( !fgets( input, size+1, stdin) );
+    fgets( input, size+1, stdin);
+    char newline;//flush the newline
+    fgets( &newline, size+1, stdin);
 }
 
 //char data extraction : TODO : raw binary extraction
@@ -87,45 +89,56 @@ void init_syn0( double syn0[], int size ){
 }
 
 int train_mode(Options o, SynStore s){
-    
-    //create train data input buffer based on largest size
-    char input_buffer[o->size+1];
-    
-    //zero out the buffer
-    for( int cell = 0; cell < o->size; cell++)
-        input_buffer[ cell ] = 0;
-    
-    //get the input from stdin
-    get_input( input_buffer, o->size );
+    for( int data = 0; data < o->numdata; data++ ){
+        
+        printf("Training data number: %d\n", data);
 
-    //extract data length, solution flag, and data
-    TData d = malloc( sizeof( TData_s ) );
-    extract_data( d, input_buffer, o->size );
-
-    //begin training    
-    //forward propegation
-    double layer1 = sigmoid( vv( s->synapse0, d->data, o->size - 1 ), 0 );
-    printf("Layer1: %f\n", layer1);
-
-    //get error
-    double error = d->solution - layer1;
-    printf("Error: %f\n", error);
-
-    //correct synapse
-    //if neural net is really sure alter less but if its not alter more using sigmoid derivative
-    double layer1_delta = error * sigmoid( layer1, 1 );
-    printf("L1 Delta: %f\n", layer1_delta);
-    for(int bit = 0; bit < o->size - 1; bit++){
-        if( d->data[bit] = 0 )
-            s->synapse0[bit] += 0.0;
-        else{
-            s->synapse0[bit] += layer1_delta;
+        printf("Syn0: [");
+        for(int cell = 0; cell < o->size-1; cell++){
+            printf("%f, ",s->synapse0[cell]);
         }
-    }
+        printf("]\n");
+        
+        //create train data input buffer based on largest size
+        char input_buffer[o->size+1];
+    
+        //zero out the buffer
+        for( int cell = 0; cell < o->size; cell++)
+            input_buffer[ cell ] = 0;
+    
+        //get the input from stdin
+        get_input( input_buffer, o->size );
 
-    //cleanup
-    free( d->data );
-    free( d );
+        printf("Input: [");
+        for(int cell = 0; cell < o->size-1; cell++){
+            printf("%c, ",input_buffer[cell]);
+        }
+        printf("]\n");
+
+        //extract data length, solution flag, and data
+        TData d = malloc( sizeof( TData_s ) );
+        extract_data( d, input_buffer, o->size );
+
+        //begin training    
+        //forward propegation
+        double layer1 = sigmoid( vv( s->synapse0, d->data, o->size - 1 ), 0 );
+        printf("\tLayer1: %f\n", layer1);
+
+        //get error
+        double error = d->solution - layer1;
+        printf("\tError: %f\n", error);
+
+        //correct synapse
+        //if neural net is really sure alter less but if its not alter more using sigmoid derivative
+        double layer1_delta = error * sigmoid( layer1, 1 );
+        printf("\tL1 Delta: %f\n", layer1_delta);
+        for(int bit = 0; bit < o->size - 1; bit++)
+            if( d->data[bit] > 0 )
+                s->synapse0[bit] += layer1_delta;
+        //cleanup
+        free( d->data );
+        free( d );
+    }
 
 }
 
