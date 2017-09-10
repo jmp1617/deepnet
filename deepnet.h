@@ -26,6 +26,8 @@ typedef TData_s* TData;
 //synapse storage
 typedef struct{
     double* synapse0;
+    double** synapse1;
+    double** synapse2;
 } SynStore_s;
 
 typedef SynStore_s* SynStore;
@@ -48,8 +50,9 @@ void get_input( char input[], int size );
 //extract size and solution
 void extract_data( TData d, char input_buffer[], int size );
 
-//fill the synapse with random numbers mean 0
+//fill the synapses with random numbers mean 0
 void init_syn0( double syn0[], int size );
+void init_syn1( double** syn1, int rows, int cols );
 
 ///Math
 //sigmoid function

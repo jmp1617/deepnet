@@ -26,10 +26,24 @@ int main( int argc, char* argv[] ){
     o->file = malloc( sizeof( char ) * 50 );
     memcpy( o->file, argv[4], strlen( argv[4] ) + 1 );
 
-    //init synapse storage
+    //prepare synapse storage
     SynStore s = malloc( sizeof( SynStore_s ) );
     s->synapse0 = malloc( sizeof( double ) * o->size - 1 );
-    init_syn0(s->synapse0, o->size - 1);
+    //init synapse 2
+    s->synapse1 = malloc( sizeof( double* ) * 4 );
+    s->synapse1[0] = malloc( sizeof( double ) * o->size * 4 );
+    for( int i = 0; i < 4; i++ )
+        s->synapse1[i] = ( *s->synapse1 + o->size * i );
+    //init synapse 3
+    s->synapse2 = malloc( sizeof( double*) * 4 );
+    s->synapse2[0] = malloc( sizeof( double ) * 16 );
+    for( int i = 0; i < 4; i++ )
+        s->synapse2[i] = ( *s->synapse2 + 4 * i );
+
+    //init synapses
+    init_syn0( s->synapse0, o->size - 1 );
+    init_syn1( s->synapse1, o->size - 1, 4 );
+    init_syn1( s->synapse2, 4, 4 );
 
     //select runtype
     if( o->mode == 't' ) //train

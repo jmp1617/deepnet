@@ -88,6 +88,15 @@ void init_syn0( double syn0[], int size ){
     }
 }
 
+void init_syn1( double** syn1, int rows, int cols ){
+    srand((unsigned) time(NULL));
+    for( int row = 0; row < rows; row++ ){
+        for( int col = 0; col < cols; col++ ){
+            syn1[row][col] = (double)rand()/RAND_MAX*2.0-1.0;
+        }
+    }
+}
+
 int train_mode(Options o, SynStore s){
     for( int data = 0; data < o->numdata; data++ ){
         
