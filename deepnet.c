@@ -42,7 +42,7 @@ int main( int argc, char* argv[] ){
 
     //init synapses
     init_syn0( s->synapse0, o->size - 1 );
-    init_syn1( s->synapse1, o->size - 1, 4 );
+    init_syn1( s->synapse1, 4, o->size - 1 );
     init_syn1( s->synapse2, 4, 4 );
 
     //select runtype

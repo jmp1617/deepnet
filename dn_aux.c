@@ -101,13 +101,27 @@ int train_mode(Options o, SynStore s){
     for( int data = 0; data < o->numdata; data++ ){
         
         printf("Training data number: %d\n", data);
-
-        printf("Syn0: [");
+        printf("===SYNAPSES===\n");
+        printf("Syn0:\n");
         for(int cell = 0; cell < o->size-1; cell++){
-            printf("%f, ",s->synapse0[cell]);
+            printf("%f ",s->synapse0[cell]);
         }
-        printf("]\n");
-        
+        printf("\nSyn1:\n");
+        for(int row = 0; row < 4; row++){
+            for(int col = 0; col < o->size - 1; col++){
+                printf("%f ",s->synapse1[row][col]);
+            }
+            printf("\n");
+        }
+        printf("Syn2:\n");
+        for(int row = 0; row < 4; row++){
+            for(int col = 0; col < 4; col++){
+                printf("%f ",s->synapse2[row][col]);
+            }
+            printf("\n");
+        }
+        printf("=============\n");
+        /**
         //create train data input buffer based on largest size
         char input_buffer[o->size+1];
     
@@ -147,6 +161,7 @@ int train_mode(Options o, SynStore s){
         //cleanup
         free( d->data );
         free( d );
+        **/
     }
 
 }
