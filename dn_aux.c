@@ -61,9 +61,7 @@ int check_args( char* argv[] ){
 }
 
 void get_input( char input[], int size ){
-    fgets( input, size+1, stdin);
-    char newline;//flush the newline
-    fgets( &newline, size+1, stdin);
+    fgets( input, size+2, stdin);
 }
 
 //char data extraction : TODO : raw binary extraction
@@ -121,17 +119,18 @@ int train_mode(Options o, SynStore s){
             printf("\n");
         }
         printf("=============\n\n");
-        /**
+        
         //create train data input buffer based on largest size
         char input_buffer[o->size+1];
     
         //zero out the buffer
         for( int cell = 0; cell < o->size; cell++)
-            input_buffer[ cell ] = 0;
-    
+            input_buffer[ cell ] = '0';
+        
         //get the input from stdin
         get_input( input_buffer, o->size );
-
+        
+/**
         printf("Input: [");
         for(int cell = 0; cell < o->size-1; cell++){
             printf("%c, ",input_buffer[cell]);
@@ -161,7 +160,7 @@ int train_mode(Options o, SynStore s){
         //cleanup
         free( d->data );
         free( d );
-        **/
+       **/ 
     }
 
 }
