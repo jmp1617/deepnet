@@ -28,22 +28,22 @@ int main( int argc, char* argv[] ){
 
     //prepare synapse storage
     SynStore s = malloc( sizeof( SynStore_s ) );
-    s->synapse0 = malloc( sizeof( double ) * o->size - 1 );
-    //init synapse 2
-    s->synapse1 = malloc( sizeof( double* ) * 4 );
-    s->synapse1[0] = malloc( sizeof( double ) * o->size * 4 );
+    s->synapse2 = malloc( sizeof( double ) * 4 );
+    //init synapse 0
+    s->synapse0 = malloc( sizeof( double* ) * o->size );
+    s->synapse0[0] = malloc( sizeof( double ) * o->size * 4 );
+    for( int i = 0; i < o->size; i++ )
+        s->synapse0[i] = ( *s->synapse0 + 4 * i );
+    //init synapse 1
+    s->synapse1 = malloc( sizeof( double*) * 4 );
+    s->synapse1[0] = malloc( sizeof( double ) * 16 );
     for( int i = 0; i < 4; i++ )
-        s->synapse1[i] = ( *s->synapse1 + o->size * i );
-    //init synapse 3
-    s->synapse2 = malloc( sizeof( double*) * 4 );
-    s->synapse2[0] = malloc( sizeof( double ) * 16 );
-    for( int i = 0; i < 4; i++ )
-        s->synapse2[i] = ( *s->synapse2 + 4 * i );
+        s->synapse1[i] = ( *s->synapse1 + 4 * i );
 
     //init synapses
-    init_syn0( s->synapse0, o->size - 1 );
-    init_syn1( s->synapse1, 4, o->size - 1 );
-    init_syn1( s->synapse2, 4, 4 );
+    init_syn2( s->synapse2, 4 );
+    init_syn1( s->synapse0, o->size - 1, 4 );
+    init_syn1( s->synapse1, 4, 4 );
 
     //select runtype
     if( o->mode == 't' ) //train
