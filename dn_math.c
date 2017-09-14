@@ -32,7 +32,7 @@ double vv( double v1[], double v2[], int size ){
     return result;
 }
 
-void vm( int center, int right, double v1[], double m1[][right], double result[] ){
+void vm( int center, int right, double v1[], double** m1, double result[] ){
     for( int row = 0; row < right; row++ ){
         for( int col = 0; col < center; col++ ){
             result[row] += m1[row][col] * v1[col];
@@ -40,7 +40,7 @@ void vm( int center, int right, double v1[], double m1[][right], double result[]
     }
 }
 
-void mm( int left, int center, int right, double m1[][center], double m2[][right], double result[][right] ){
+void mm( int left, int center, int right, double** m1, double** m2, double result[][right] ){
     for( int row = 0; row < left; row++ ){
         for( int col = 0; col < right; col++ ){
             for( int inner = 0; inner < center; inner++ ){

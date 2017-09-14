@@ -63,8 +63,8 @@ void sigmoid_matrix( int rows, int cols, double m[][cols], int dir );
 //dot products
 double vv( double v1[], double v2[], int size );
 //[left, center]x[center, right] = [left, right]
-void vm( int center, int right, double v1[], double m1[][right], double result[] );
-void mm( int left, int center, int right, double m1[][center], double m2[][right], double result[][right] );
+void vm( int center, int right, double v1[], double** m1, double result[] );
+void mm( int left, int center, int right, double** m1, double** m2, double result[][right] );
 
 
 #endif

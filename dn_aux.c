@@ -129,7 +129,7 @@ int train_mode(Options o, SynStore s){
         //get the input from stdin
         get_input( input_buffer, o->size );
         
-        printf("Input: [");
+        printf("INPUT: ");
         for(int cell = 0; cell < o->size-1; cell++){
             printf("%c, ",input_buffer[cell]);
         }
@@ -149,9 +149,33 @@ int train_mode(Options o, SynStore s){
         //###########
 
         //begin training    
-        //forward propegation
-    //    double layer1 = sigmoid( vv( s->synapse0, d->data, o->size - 1 ), 0 );
-    //    printf("\tLayer1: %f\n", layer1);
+        //FORWARD PROPEGATION
+        //L1
+        vm( o->size, 4, L0, s->synapse0, L1 );
+        sigmoid_vector( 4, L1, 0 );
+        //L2
+        vm( 4, 4, L1, s->synapse1, L2 );
+        sigmoid_vector( 4, L2, 0 );
+        //L3
+        L3 = sigmoid( vv( L2, s->synapse2, 4 ), 0 );
+
+        printf("LAYERS:\nlayer0: ");
+        for( int cell = 0; cell < o->size - 1; cell++ ){
+            printf("%f ", L0[cell]);
+        }
+        printf("\n");
+        printf("layer1: ");
+        for( int cell = 0; cell < 4; cell++ ){
+            printf("%f ", L1[cell]);
+        }
+        printf("\n");
+        printf("layer2: ");
+        for( int cell = 0; cell < 4; cell++ ){
+            printf("%f ", L2[cell]);
+        }
+        printf("\n");
+        printf("layer3: %f\n", L3);
+
 /**
         //get error
         double error = d->solution - layer1;
