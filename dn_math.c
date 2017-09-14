@@ -10,16 +10,16 @@ double sigmoid( double input, int derivative ){
     return 1 / ( 1 + exp( -input ) );
 }
 
-void sigmoid_vector( int size, double v[] ){
+void sigmoid_vector( int size, double v[], int dir ){
     for( int cell = 0; cell < size; cell++ ){
-        v[cell] = sigmoid( v[cell], 0 );
+        v[cell] = sigmoid( v[cell], dir );
     }
 }
 
-void sigmoid_matrix( int rows, int cols, double m[][cols] ){
+void sigmoid_matrix( int rows, int cols, double m[][cols], int dir ){
     for( int row = 0; row < rows; row++ ){
         for( int col = 0; col < cols; col++ ){
-            m[row][col] = sigmoid( m[row][col], 0 );
+            m[row][col] = sigmoid( m[row][col], dir );
         }
     }
 }

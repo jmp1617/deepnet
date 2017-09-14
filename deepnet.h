@@ -57,8 +57,8 @@ void init_syn1( double** syn1, int rows, int cols );
 ///Math
 //sigmoid function
 double sigmoid( double input, int derivative );
-void sigmoid_vector( int size, double v[] );
-void sigmoid_matrix( int rows, int cols, double m[][cols] );
+void sigmoid_vector( int size, double v[], int dir );
+void sigmoid_matrix( int rows, int cols, double m[][cols], int dir );
 
 //dot products
 double vv( double v1[], double v2[], int size );
