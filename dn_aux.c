@@ -137,7 +137,7 @@ int train_mode(Options o, SynStore s){
         //extract data length, solution flag, and data
         TData d = malloc( sizeof( TData_s ) );
         extract_data( d, input_buffer, o->size );
-        printf("%f]\n",d->solution);
+        printf("[%f]\n",d->solution);
         
         //##Layers###
         //
@@ -159,22 +159,54 @@ int train_mode(Options o, SynStore s){
         //L3
         L3 = sigmoid( vv( L2, s->synapse2, 4 ), 0 );
 
-        printf("LAYERS:\nlayer0: ");
+        printf("LAYERS:\n\tlayer0: ");
         for( int cell = 0; cell < o->size - 1; cell++ ){
             printf("%f ", L0[cell]);
         }
         printf("\n");
-        printf("layer1: ");
+        printf("\tlayer1: ");
         for( int cell = 0; cell < 4; cell++ ){
             printf("%f ", L1[cell]);
         }
         printf("\n");
-        printf("layer2: ");
+        printf("\tlayer2: ");
         for( int cell = 0; cell < 4; cell++ ){
             printf("%f ", L2[cell]);
         }
         printf("\n");
-        printf("layer3: %f\n", L3);
+        printf("\tlayer3: %f\n", L3);
+
+        //ERROR
+        double L3_error = d->solution - L3;
+        printf("ERROR:\n\tlayer3: %f\n",L3_error);
+
+        //backpropegation
+        double L3_delta = L3_error * sigmoid( L3, 1 );
+        
+        double L2_error[4] = {0};
+        printf("\tlayer2: ");
+        for( int cell = 0; cell < 4; cell++ ){
+            L2_error[cell] = s->synapse2[cell] * L3_delta;
+            printf("%f ",L2_error[cell]);
+        }
+        printf("\n\tlayer1: ");
+        double L2_delta[4] = {0};
+        for( int cell = 0; cell < 4; cell++ ){
+            L2_delta[cell] = L2_error[cell] * sigmoid( L2[cell], 1 );
+        }
+
+        double L1_error[4] = {0};
+        vm( 4, 4, L2_delta, s->synapse1, L1_error );
+        for( int cell = 0; cell < 4; cell++ ){
+            printf("%f ", L1_error[cell]);
+        }
+        printf("\n");
+        double L1_delta[4] = {0};
+        for( int cell = 0; cell < 4; cell++ ){
+            L1_delta[cell] = L1_error[cell] * sigmoid( L1[cell], 1 );
+        }
+
+        
 
 /**
         //get error
