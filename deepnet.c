@@ -54,8 +54,13 @@ int main( int argc, char* argv[] ){
     //cleanup
     free( o->file );
     free( o );
+    free( s->synapse2 );
+    free( s->synapse1[0] );
+    free( s->synapse1 );
+    free( s->synapse0[0] );
     free( s->synapse0 );
     free( s );
+
 
     return 0;
 }

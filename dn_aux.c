@@ -182,6 +182,7 @@ int train_mode(Options o, SynStore s){
 
         //backpropegation
         double L3_delta = L3_error * sigmoid( L3, 1 );
+        printf("\t\tlayer3 delta: %f\n",L3_delta);
         
         double L2_error[4] = {0};
         printf("\tlayer2: ");
@@ -189,45 +190,55 @@ int train_mode(Options o, SynStore s){
             L2_error[cell] = s->synapse2[cell] * L3_delta;
             printf("%f ",L2_error[cell]);
         }
-        printf("\n\tlayer1: ");
+        printf("\n\t\tlayer2 delta: ");
         double L2_delta[4] = {0};
         for( int cell = 0; cell < 4; cell++ ){
             L2_delta[cell] = L2_error[cell] * sigmoid( L2[cell], 1 );
+            printf("%f ",L2_delta[cell]);
         }
+        printf("\n\tlayer1: ");
 
         double L1_error[4] = {0};
         vm( 4, 4, L2_delta, s->synapse1, L1_error );
         for( int cell = 0; cell < 4; cell++ ){
             printf("%f ", L1_error[cell]);
         }
-        printf("\n");
+        printf("\n\t\tlayer1 delta: ");
         double L1_delta[4] = {0};
         for( int cell = 0; cell < 4; cell++ ){
             L1_delta[cell] = L1_error[cell] * sigmoid( L1[cell], 1 );
+            printf("%f ",L1_delta[cell]);
+        }
+        printf("\n");
+        
+        //UPDATE synapses
+        double syn0_update[o->size-1][4];
+
+        //syn2 
+        for( int cell = 0; cell < 4; cell++ ){
+            s->synapse2[cell] += L2[cell] * L3_delta;
+        }
+        //syn1
+        for( int row = 0; row < 4; row++ ){
+            for( int col = 0; col < 4; col++ ){
+                s->synapse1[row][col] += L1[row] * L2_delta[col];
+            }
+        }
+        //syn0
+        for( int row = 0; row < o->size-1; row++ ){
+            for( int col = 0; col < 4; col++){
+                s->synapse0[row][col] += L0[row] * L1_delta[col];
+            }
         }
 
-        
-
-/**
-        //get error
-        double error = d->solution - layer1;
-        printf("\tError: %f\n", error);
-
-        //correct synapse
-        //if neural net is really sure alter less but if its not alter more using sigmoid derivative
-        double layer1_delta = error * sigmoid( layer1, 1 );
-        printf("\tL1 Delta: %f\n", layer1_delta);
-        for(int bit = 0; bit < o->size - 1; bit++)
-            if( d->data[bit] > 0 )
-                s->synapse0[bit] += layer1_delta;
         //cleanup
-        free( d->data );
-        free( d );
-       **/ 
+        free(d->data);
+        free(d);
     }
 
 }
 
 int analyze_mode(Options o){
+
     return 0;
 }
