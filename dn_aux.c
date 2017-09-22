@@ -230,6 +230,12 @@ int train_mode(Options o, SynStore s){
             }
         }
 
+        //prepare for opengl
+        int num_prims = 4*o->size*3;
+        double primatives[num_prims];
+
+        generate_primatives( s, o, primatives );
+
         //cleanup
         free(d->data);
         free(d);
@@ -374,5 +380,19 @@ void import_brain( SynStore s, Options o ){
         s->synapse2[cell] = atof(tempbuf);
     }
     printf("Synapses loaded\n");
+    
+    fclose(fp);
 }
+
+void generate_primatives( SynStore s, Options o, double primatives[] ){
+    //synapse 0 x, synapse 1 y, synapse 2 z
+    //number of primatives = grid size of synapse 0 * 3
+    //fill
+    for( int prim = 0; prim < ( 4 * (o->size-1) ); prim++ ){
+        primatives[prim*3] = s->synapse0[prim%(o->size-1)][prim/(o->size-1)];
+        primatives[prim*3+1] = s->synapse1[(prim%(4*4))%4][(prim%(4*4))/4];
+        primatives[prim*3+2] = s->synapse2[prim%4]; 
+    }
+}
+
 

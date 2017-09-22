@@ -65,6 +65,5 @@ int main( int argc, char* argv[] ){
     free( s->synapse0 );
     free( s );
 
-
     return 0;
 }

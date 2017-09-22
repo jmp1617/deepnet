@@ -1,4 +1,4 @@
-///Math functions and routine implimentation
+//Math functions and routine implimentation
 
 #include <stdlib.h>
 #include <math.h>

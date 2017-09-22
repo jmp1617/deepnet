@@ -71,4 +71,7 @@ void export_brain( SynStore s, Options o );
 
 //import the brain from file
 void import_brain( SynStore s, Options o );
+
+//generate primatives for opengl
+void generate_primatives( SynStore s, Options o, double primatives[] );
 #endif
