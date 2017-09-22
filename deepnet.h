@@ -42,7 +42,7 @@ int check_args( char* argv[] );
 int train_mode(Options o, SynStore s);
 
 //analyze mode
-int analyze_mode(Options o);
+int analyze_mode(Options o, SynStore s);
 
 //get input from stdin
 void get_input( char input[], int size );
@@ -69,4 +69,6 @@ void mm( int left, int center, int right, double** m1, double** m2, double resul
 //export the brain to specified file
 void export_brain( SynStore s, Options o );
 
+//import the brain from file
+void import_brain( SynStore s, Options o );
 #endif

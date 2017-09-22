@@ -40,19 +40,20 @@ int main( int argc, char* argv[] ){
     for( int i = 0; i < 4; i++ )
         s->synapse1[i] = ( *s->synapse1 + 4 * i );
 
-    //init synapses
-    init_syn2( s->synapse2, 4 );
-    init_syn1( s->synapse0, o->size - 1, 4 );
-    init_syn1( s->synapse1, 4, 4 );
-
     //select runtype
     if( o->mode == 't' ){ //train
+        //init synapses
+        init_syn2( s->synapse2, 4 );
+        init_syn1( s->synapse0, o->size - 1, 4 );
+        init_syn1( s->synapse1, 4, 4 );
         train_mode( o, s );
         printf("\n\nDONE TRAINING\n\n");
         export_brain( s, o );
     }
-    else
-        analyze_mode( o );
+    else{
+        import_brain( s, o );
+        analyze_mode( o, s );
+    }
     
     //cleanup
     free( o->file );

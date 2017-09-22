@@ -151,7 +151,7 @@ int train_mode(Options o, SynStore s){
         //begin training    
         //FORWARD PROPEGATION
         //L1
-        vm( o->size, 4, L0, s->synapse0, L1 );
+        vm( o->size-1, 4, L0, s->synapse0, L1 );
         sigmoid_vector( 4, L1, 0 );
         //L2
         vm( 4, 4, L1, s->synapse1, L2 );
@@ -212,8 +212,7 @@ int train_mode(Options o, SynStore s){
         printf("\n");
         
         //UPDATE synapses
-        double syn0_update[o->size-1][4];
-
+        
         //syn2 
         for( int cell = 0; cell < 4; cell++ ){
             s->synapse2[cell] += L2[cell] * L3_delta;
@@ -235,11 +234,96 @@ int train_mode(Options o, SynStore s){
         free(d->data);
         free(d);
     }
-
+    return 0;
 }
 
-int analyze_mode(Options o){
+int analyze_mode(Options o, SynStore s){
+    
+    printf("\n===SYNAPSES===\n");
+    printf("Syn0:\n");
+    for(int row = 0; row < o->size; row++){
+       for(int col = 0; col < 4; col++){
+            printf("%f ",s->synapse0[row][col]);
+        }
+        printf("\n");
+    }
+    printf("\nSyn1:\n");
+    for(int row = 0; row < 4; row++){
+        for(int col = 0; col < 4; col++){
+            printf("%f ",s->synapse1[row][col]);
+        }
+        printf("\n");
+    }
+    printf("\nSyn2:\n");
+    for(int cell = 0; cell < 4; cell++){
+        printf("%f ",s->synapse2[cell]);
+    }
+    printf("\n=============\n\n");
+    for( int data = 0; data < o->numdata; data++ ){
+        printf("##########################\n#Analysis data number: %d #\n##########################\n", data);
+                
+        //create train data input buffer based on largest size
+        char input_buffer[o->size+1];
+    
+        //zero out the buffer
+        for( int cell = 0; cell < o->size; cell++)
+            input_buffer[ cell ] = '0';
+        
+        //get the input from stdin
+        get_input( input_buffer, o->size );
+    
+        //extract
+        double data[o->size];
 
+        printf("INPUT: ");
+        for(int cell = 0; cell < o->size; cell++){
+            printf("%c ",input_buffer[cell]);
+            if( input_buffer[cell] == '1' )
+                data[cell] = 1.0;
+            else
+                data[cell] = 0.0;
+        }
+        //FORWARD PROPEGATION
+        //##Layers###
+        //
+        double L1[4] = {0};
+        double L2[4] = {0};
+        double L3 = 0;
+        //
+        //###########
+
+        //begin training    
+        //FORWARD PROPEGATION
+        //L1
+        vm( o->size, 4, data, s->synapse0, L1 );
+        sigmoid_vector( 4, L1, 0 );
+        //L2
+        vm( 4, 4, L1, s->synapse1, L2 );
+        sigmoid_vector( 4, L2, 0 );
+        //L3
+        L3 = sigmoid( vv( L2, s->synapse2, 4 ), 0 );
+
+        printf("\nLAYERS:\n\tlayer0: ");
+        for( int cell = 0; cell < o->size; cell++ ){
+            printf("%f ", data[cell]);
+        }
+        printf("\n");
+        printf("\tlayer1: ");
+        for( int cell = 0; cell < 4; cell++ ){
+            printf("%f ", L1[cell]);
+        }
+        printf("\n");
+        printf("\tlayer2: ");
+        for( int cell = 0; cell < 4; cell++ ){
+            printf("%f ", L2[cell]);
+        }
+        printf("\n");
+        printf("\tlayer3: %f\n", L3);
+
+        printf("RESULT: %f%%\n", L3*100);
+
+        
+    }
     return 0;
 }
 
@@ -265,3 +349,30 @@ void export_brain( SynStore s, Options o ){
 
     fclose(fp);
 }
+
+void import_brain( SynStore s, Options o ){
+    FILE* fp = fopen( o->file, "r" );
+    char tempbuf[11] = {0};
+
+    //read in synapse0
+    for( int row = 0; row < o->size; row++ ){
+        for( int col =0; col < 4; col++ ){
+            fgets( tempbuf, 11, fp );
+            s->synapse0[row][col] = atof(tempbuf);
+        }
+    }
+    //read in synapse1
+    for( int row = 0; row < 4; row++ ){
+        for( int col =0; col < 4; col++ ){
+            fgets( tempbuf, 11, fp );
+            s->synapse1[row][col] = atof(tempbuf);
+        }
+    }
+    //read in synapse2
+    for( int cell = 0; cell < 4; cell++ ){
+        fgets( tempbuf, 11, fp );
+        s->synapse2[cell] = atof(tempbuf);
+    }
+    printf("Synapses loaded\n");
+}
+
