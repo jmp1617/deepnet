@@ -242,3 +242,26 @@ int analyze_mode(Options o){
 
     return 0;
 }
+
+void export_brain( SynStore s, Options o ){    
+    FILE* fp = fopen( o->file, "w" );
+    
+    //write synapse0
+    for( int row = 0; row < o->size-1; row++ ){
+        for( int col = 0; col < 4; col++ ){
+            fprintf(fp, "%f\n",s->synapse0[row][col]);
+        }
+    }
+    //syn1
+    for( int row = 0; row < 4; row++ ){
+        for( int col = 0; col < 4; col++ ){
+            fprintf(fp, "%f\n",s->synapse1[row][col]);
+        }
+    }
+    //syn2
+    for( int cell = 0; cell < 4; cell++ ){
+        fprintf(fp,"%f\n",s->synapse2[cell]);
+    }
+
+    fclose(fp);
+}

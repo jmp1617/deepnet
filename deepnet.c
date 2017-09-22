@@ -46,8 +46,11 @@ int main( int argc, char* argv[] ){
     init_syn1( s->synapse1, 4, 4 );
 
     //select runtype
-    if( o->mode == 't' ) //train
+    if( o->mode == 't' ){ //train
         train_mode( o, s );
+        printf("\n\nDONE TRAINING\n\n");
+        export_brain( s, o );
+    }
     else
         analyze_mode( o );
     

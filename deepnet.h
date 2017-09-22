@@ -66,5 +66,7 @@ double vv( double v1[], double v2[], int size );
 void vm( int center, int right, double v1[], double** m1, double result[] );
 void mm( int left, int center, int right, double** m1, double** m2, double result[][right] );
 
+//export the brain to specified file
+void export_brain( SynStore s, Options o );
 
 #endif
