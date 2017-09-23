@@ -97,6 +97,7 @@ void init_syn1( double** syn1, int rows, int cols ){
 
 int train_mode(Options o, SynStore s){
     for( int data = 0; data < o->numdata; data++ ){
+#ifdef DEBUG
         printf("##########################\n#Training data number: %d #\n##########################\n", data);
         printf("===SYNAPSES===\n");
         printf("Syn0:\n");
@@ -118,7 +119,7 @@ int train_mode(Options o, SynStore s){
             printf("%f ",s->synapse2[cell]);
         }
         printf("\n=============\n\n");
-        
+#endif
         //create train data input buffer based on largest size
         char input_buffer[o->size+1];
     
@@ -128,17 +129,19 @@ int train_mode(Options o, SynStore s){
         
         //get the input from stdin
         get_input( input_buffer, o->size );
-        
+#ifdef DEBUG
         printf("INPUT: ");
         for(int cell = 0; cell < o->size-1; cell++){
             printf("%c, ",input_buffer[cell]);
         }
+#endif
 
         //extract data length, solution flag, and data
         TData d = malloc( sizeof( TData_s ) );
         extract_data( d, input_buffer, o->size );
+#ifdef DEBUG
         printf("[%f]\n",d->solution);
-        
+#endif        
         //##Layers###
         //
         double* L0 = d->data;
@@ -158,7 +161,7 @@ int train_mode(Options o, SynStore s){
         sigmoid_vector( 4, L2, 0 );
         //L3
         L3 = sigmoid( vv( L2, s->synapse2, 4 ), 0 );
-
+#ifdef DEBUG
         printf("LAYERS:\n\tlayer0: ");
         for( int cell = 0; cell < o->size - 1; cell++ ){
             printf("%f ", L0[cell]);
@@ -175,42 +178,58 @@ int train_mode(Options o, SynStore s){
         }
         printf("\n");
         printf("\tlayer3: %f\n", L3);
-
+#endif
         //ERROR
         double L3_error = d->solution - L3;
+#ifdef DEBUG
         printf("ERROR:\n\tlayer3: %f\n",L3_error);
-
+#endif
         //backpropegation
         double L3_delta = L3_error * sigmoid( L3, 1 );
+#ifdef DEBUG
         printf("\t\tlayer3 delta: %f\n",L3_delta);
-        
+#endif      
         double L2_error[4] = {0};
+#ifdef DEBUG
         printf("\tlayer2: ");
+#endif
         for( int cell = 0; cell < 4; cell++ ){
             L2_error[cell] = s->synapse2[cell] * L3_delta;
+#ifdef DEBUG
             printf("%f ",L2_error[cell]);
+#endif
         }
+#ifdef DEBUG
         printf("\n\t\tlayer2 delta: ");
+#endif
         double L2_delta[4] = {0};
         for( int cell = 0; cell < 4; cell++ ){
             L2_delta[cell] = L2_error[cell] * sigmoid( L2[cell], 1 );
+#ifdef DEBUG
             printf("%f ",L2_delta[cell]);
+#endif
         }
+#ifdef DEBUG
         printf("\n\tlayer1: ");
-
+#endif
         double L1_error[4] = {0};
         vm( 4, 4, L2_delta, s->synapse1, L1_error );
+#ifdef DEBUG
         for( int cell = 0; cell < 4; cell++ ){
             printf("%f ", L1_error[cell]);
         }
         printf("\n\t\tlayer1 delta: ");
+#endif
         double L1_delta[4] = {0};
         for( int cell = 0; cell < 4; cell++ ){
             L1_delta[cell] = L1_error[cell] * sigmoid( L1[cell], 1 );
+#ifdef DEBUG
             printf("%f ",L1_delta[cell]);
+#endif
         }
+#ifdef DEBUG
         printf("\n");
-        
+#endif        
         //UPDATE synapses
         
         //syn2 
@@ -231,14 +250,19 @@ int train_mode(Options o, SynStore s){
         }
 
         //prepare for opengl
-        int num_prims = 4*o->size*3;
+        int num_prims = 4*(o->size-1)*3;
         double primatives[num_prims];
 
-        generate_primatives( s, o, primatives );
-
+        generate_primatives( s, o, primatives ); 
+        
         //cleanup
         free(d->data);
         free(d);
+        printf( "\033[2J" );
+        fflush( stdout );
+        printf( "\033[%d;%dH", 1, 0 );
+        printf("%f%%\n",(double)data/o->numdata*100);
+        printf("%d of %d\n",data,o->numdata);
     }
     return 0;
 }
@@ -389,9 +413,9 @@ void generate_primatives( SynStore s, Options o, double primatives[] ){
     //number of primatives = grid size of synapse 0 * 3
     //fill
     for( int prim = 0; prim < ( 4 * (o->size-1) ); prim++ ){
-        primatives[prim*3] = s->synapse0[prim%(o->size-1)][prim/(o->size-1)];
-        primatives[prim*3+1] = s->synapse1[(prim%(4*4))%4][(prim%(4*4))/4];
-        primatives[prim*3+2] = s->synapse2[prim%4]; 
+        primatives[prim*3] = prim_norm(s->synapse0[prim%(o->size-1)][prim/(o->size-1)]);
+        primatives[prim*3+1] = prim_norm(s->synapse1[(prim%(4*4))%4][(prim%(4*4))/4]);
+        primatives[prim*3+2] = prim_norm(s->synapse2[prim%4]); 
     }
 }
 

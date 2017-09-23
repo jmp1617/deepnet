@@ -59,7 +59,8 @@ void init_syn1( double** syn1, int rows, int cols );
 double sigmoid( double input, int derivative );
 void sigmoid_vector( int size, double v[], int dir );
 void sigmoid_matrix( int rows, int cols, double m[][cols], int dir );
-
+//primatives normalization
+double prim_norm(double p);
 //dot products
 double vv( double v1[], double v2[], int size );
 //[left, center]x[center, right] = [left, right]

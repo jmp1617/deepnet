@@ -47,7 +47,12 @@ int main( int argc, char* argv[] ){
         init_syn1( s->synapse0, o->size - 1, 4 );
         init_syn1( s->synapse1, 4, 4 );
         train_mode( o, s );
-        printf("\n\nDONE TRAINING\n\n");
+        
+        printf( "\033[%d;%dH", 1, 0 );
+        printf("%f%%\n",(double)100);
+        printf("%d of %d\n",o->numdata,o->numdata);
+
+        printf("\nDONE TRAINING\n");
         export_brain( s, o );
     }
     else{

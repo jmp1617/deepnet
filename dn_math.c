@@ -24,6 +24,10 @@ void sigmoid_matrix( int rows, int cols, double m[][cols], int dir ){
     }
 }
 
+double prim_norm(double p){
+    return 2.0 * ( ( 1 / ( 1 + exp( (-1.0/10.0) * p ) ) ) - 0.5 );
+}
+
 double vv( double v1[], double v2[], int size ){
     double result = 0.0;
     for( int cell = 0; cell < size; cell++ ){
