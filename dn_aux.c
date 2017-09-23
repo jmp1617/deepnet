@@ -96,6 +96,11 @@ void init_syn1( double** syn1, int rows, int cols ){
 }
 
 int train_mode(Options o, SynStore s){
+    
+    Opengl gl = malloc( sizeof( Options_s ) );
+
+    init_opengl( gl );
+    
     for( int data = 0; data < o->numdata; data++ ){
 #ifdef DEBUG
         printf("##########################\n#Training data number: %d #\n##########################\n", data);
@@ -254,6 +259,8 @@ int train_mode(Options o, SynStore s){
         double primatives[num_prims];
 
         generate_primatives( s, o, primatives ); 
+
+        render_primatives( primatives );
         
         //cleanup
         free(d->data);

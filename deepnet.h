@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//structure to hold opengl uints
+typedef struct{
+    unsigned int shader_program;
+} Opengl_s;
+
+typedef Opengl_s* Opengl;
+
 //structure to hold parameter results
 typedef struct{
     char mode;
@@ -75,4 +82,8 @@ void import_brain( SynStore s, Options o );
 
 //generate primatives for opengl
 void generate_primatives( SynStore s, Options o, double primatives[] );
+
+//opengl render
+int init_opengl( Opengl gl );
+void render_primatives( double primatives[] );
 #endif
