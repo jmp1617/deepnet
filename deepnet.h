@@ -22,7 +22,7 @@ typedef struct{
     int numdata;
     int size;
     char* file;
-    int trains;
+    char visualize;
 } Options_s;
 
 typedef Options_s* Options;

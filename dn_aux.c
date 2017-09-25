@@ -7,11 +7,12 @@
 #include <pthread.h>
 
 void print_usage( void ){
-    fprintf( stderr, "Usage: deepnet [mode] [# data] [size] [neurons.brain]\n \
+    fprintf( stderr, "Usage: deepnet [mode] [# data] [size] [neurons.brain] [visualize]\n \
             \tmode: [t/a] either a 't' to specify training mode or 'a' to analyze\n \
             \t# data:  number of data for training or analysis\n \
             \tsize: the length of the largest data (including solution flag and length header if training).\n \
-            \tneurons.brain: file to dump neurons to after training or load neurons for analysis\n" );
+            \tneurons.brain: file to dump neurons to after training or load neurons for analysis\n \
+            \tvisualize: [y/n] opengl visualization of training (slower)\n" );
 }
 
 int check_args( char* argv[] ){
@@ -20,7 +21,7 @@ int check_args( char* argv[] ){
     if( strlen( argv[1] ) != 1 || !( argv[1][0] == 't' || argv[1][0] == 'a' ) ){
         fprintf( stderr, "Invalid mode: options are 't' to train or 'a' to analyze\n\n" );
         print_usage();
-        //return 1;
+        return 1;
     }
 
     //check # data: if it is a number greater than 0
@@ -54,6 +55,12 @@ int check_args( char* argv[] ){
     //check file: make sure filename is less than 50 chars long
     if( strlen( argv[4] ) > 49 ){
         fprintf( stderr, "File name cannot exceed 50 characters\n\n" );
+        print_usage();
+        return 1;
+    }
+
+    if( strlen( argv[5] ) != 1 || !( argv[5][0] == 'y' || argv[5][0] == 'n' ) ){
+        fprintf( stderr, "Invalid mode: y (yes) or n (no)\n\n" );
         print_usage();
         return 1;
     }
@@ -99,8 +106,9 @@ void init_syn1( double** syn1, int rows, int cols ){
 int train_mode(Options o, SynStore s){
     
     Opengl gl = malloc( sizeof( Options_s ) );
-
-    init_opengl( (void*)gl );
+    
+    if( o->visualize == 'y' )
+        init_opengl( (void*)gl );
     
     for( int data = 0; data < o->numdata; data++ ){
 #ifdef DEBUG
@@ -266,11 +274,13 @@ int train_mode(Options o, SynStore s){
             printf("%f %f %f\n",primatives[i],primatives[i+1],primatives[i+2]);
         }
 
-        render_primatives( primatives, gl, num_prims );
+        if( o->visualize == 'y' )
+            render_primatives( primatives, gl, num_prims );
         
         //cleanup
         free(d->data);
         free(d);
+        free(gl);
 #ifndef DEBUG
         printf( "\033[2J" );
         fflush( stdout );
