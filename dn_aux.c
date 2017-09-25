@@ -110,6 +110,11 @@ int train_mode(Options o, SynStore s){
     if( o->visualize == 'y' )
         init_opengl( (void*)gl );
     
+    int num_prims = 4*(o->size-1)*6;
+    double primatives[num_prims];
+
+    generate_colors( o, primatives );
+   
     for( int data = 0; data < o->numdata; data++ ){
 #ifdef DEBUG
         printf("##########################\n#Training data number: %d #\n##########################\n", data);
@@ -264,14 +269,12 @@ int train_mode(Options o, SynStore s){
         }
 
         //prepare for opengl
-        int num_prims = 4*(o->size-1)*3;
-        double primatives[num_prims];
-
         generate_primatives( s, o, primatives ); 
 #ifdef DEBUG
         printf("\nPrimatives\n");
-        for(int i = 0; i<num_prims; i+=3){
-            printf("%f %f %f\n",primatives[i],primatives[i+1],primatives[i+2]);
+        for(int i = 0; i<num_prims; i+=6){
+            printf("%f %f %f %f %f %f\n",primatives[i],primatives[i+1],primatives[i+2], \
+                    primatives[i+3],primatives[i+4],primatives[i+5]);
         }
 #endif
         if( o->visualize == 'y' )
@@ -284,6 +287,9 @@ int train_mode(Options o, SynStore s){
         printf( "\033[2J" );
         fflush( stdout );
         printf( "\033[%d;%dH", 1, 0 );
+        //progress bar
+        printf("");
+        //
         printf("%f%%\n",(double)data/o->numdata*100);
         printf("%d of %d\n",data,o->numdata);
 #endif
@@ -438,9 +444,18 @@ void generate_primatives( SynStore s, Options o, double primatives[] ){
     //number of primatives = grid size of synapse 0 * 3
     //fill
     for( int prim = 0; prim < ( 4 * (o->size-1) ); prim++ ){
-        primatives[prim*3] = prim_norm(s->synapse0[prim%(o->size-1)][prim/(o->size-1)]);
-        primatives[prim*3+1] = prim_norm(s->synapse1[(prim%(4*4))%4][(prim%(4*4))/4]);
-        primatives[prim*3+2] = prim_norm(s->synapse2[prim%4]); 
+        primatives[prim*6] = prim_norm(s->synapse0[prim%(o->size-1)][prim/(o->size-1)]);
+        primatives[prim*6+1] = prim_norm(s->synapse1[(prim%(4*4))%4][(prim%(4*4))/4]);
+        primatives[prim*6+2] = prim_norm(s->synapse2[prim%4]); 
+    }
+}
+
+void generate_colors( Options o, double primatives[] ){
+    srand((unsigned) time(NULL));
+    for( int prim = 0; prim < ( 4 * (o->size-1) ); prim++ ){
+        primatives[prim*6+3] = (double)rand()/RAND_MAX;
+        primatives[prim*6+4] = (double)rand()/RAND_MAX;
+        primatives[prim*6+5] = (double)rand()/RAND_MAX;
     }
 }
 

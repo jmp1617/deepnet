@@ -19,7 +19,7 @@ void* init_opengl( void* arg ){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     //create the window
-    gl->window = glfwCreateWindow( 1000, 1000, "OpenGL", NULL, NULL );
+    gl->window = glfwCreateWindow( 1000, 1000, "Deepnet", NULL, NULL );
     
     glfwMakeContextCurrent( gl->window );
 
@@ -31,17 +31,21 @@ void* init_opengl( void* arg ){
 
     //Init Shaders
     const char *vertexShaderSource = "#version 330 core\n"
-         "layout (location = 0) in vec3 aPos;\n"
+         "layout (location = 0) in vec3 pos;\n"
+         "layout (location = 1) in vec3 color;\n"
+         "out vec3 out_color;\n"
          "void main()\n"
          "{\n"
-         "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+         "   gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);\n"
+         "   out_color = color;\n"
          "}\0";
 
     const char *fragmentShaderSource = "#version 330 core\n"
          "out vec4 FragColor;\n"
+         "in vec3 out_color;\n"
          "void main()\n"
          "{\n"
-         "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+         "   FragColor = vec4(out_color, 1.0);\n"
          "}\n\0";
 
     //compile and link shaders into shader program
@@ -90,8 +94,11 @@ void render_primatives( double primatives[], Opengl gl, int size ){
     glBindBuffer( GL_ARRAY_BUFFER, gl->VBO );
     glBufferData( GL_ARRAY_BUFFER, size, primatives, GL_DYNAMIC_DRAW );
     //link the attribs //TODO: try setting to normalized
-    glVertexAttribPointer( 0, 3, GL_DOUBLE, GL_FALSE, 3 * sizeof( float ), (void*)0 );
+    glVertexAttribPointer( 0, 3, GL_DOUBLE, GL_FALSE, 6 * sizeof( double ), (void*)0 );
     glEnableVertexAttribArray( 0 );
+    //colors
+    glVertexAttribPointer( 1, 3, GL_DOUBLE, GL_FALSE, 6 * sizeof( double ), (void*)( 3 * sizeof( double ) ) );
+    glEnableVertexAttribArray( 1 );
     //unbind
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindVertexArray( 0 );

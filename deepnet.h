@@ -88,6 +88,9 @@ void import_brain( SynStore s, Options o );
 //generate primatives for opengl
 void generate_primatives( SynStore s, Options o, double primatives[] );
 
+//generate random colors for synapse streams
+void generate_colors( Options o, double primatives[] );
+
 //opengl render
 void* init_opengl( void* arg );
 void render_primatives( double primatives[], Opengl gl, int size );
