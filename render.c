@@ -103,13 +103,14 @@ void render_primatives( double primatives[], Opengl gl, int size ){
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindVertexArray( 0 );
 
+    //glEnable(GL_DEPTH_TEST);
     //render the synapse weights
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     glUseProgram( gl->shader_program );
     glBindVertexArray( gl->VAO );
-    glDrawArrays( GL_POINTS, 0, size );
+    glDrawArrays( GL_TRIANGLES, 0, size );
 
     //swap the buffers
     glfwSwapBuffers( gl->window );

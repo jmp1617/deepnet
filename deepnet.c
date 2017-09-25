@@ -49,11 +49,12 @@ int main( int argc, char* argv[] ){
         init_syn1( s->synapse1, 4, 4 );
         train_mode( o, s );
 #ifndef DEBUG        
+        printf( "\033[2J" );
+        fflush( stdout );
         printf( "\033[%d;%dH", 1, 0 );
         printf("%f%%\n",(double)100);
         printf("%d of %d\n",o->numdata,o->numdata);
 #endif
-        printf("\nDONE TRAINING\n");
         export_brain( s, o );
     }
     else{

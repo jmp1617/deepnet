@@ -288,7 +288,13 @@ int train_mode(Options o, SynStore s){
         fflush( stdout );
         printf( "\033[%d;%dH", 1, 0 );
         //progress bar
-        printf("");
+        printf("[");
+        int bars = ((double)data/o->numdata*100);
+        for( int bar = 0; bar < bars; bar++ )
+            printf("=");
+        for( int space = 0; space < 100 - bars; space++ )
+            printf(" ");
+        printf("]\n");
         //
         printf("%f%%\n",(double)data/o->numdata*100);
         printf("%d of %d\n",data,o->numdata);
