@@ -1,9 +1,10 @@
-///implimentations`
+///implimentations
 
 #include "deepnet.h"
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <pthread.h>
 
 void print_usage( void ){
     fprintf( stderr, "Usage: deepnet [mode] [# data] [size] [neurons.brain]\n \
@@ -99,7 +100,7 @@ int train_mode(Options o, SynStore s){
     
     Opengl gl = malloc( sizeof( Options_s ) );
 
-    init_opengl( gl );
+    init_opengl( (void*)gl );
     
     for( int data = 0; data < o->numdata; data++ ){
 #ifdef DEBUG
@@ -260,17 +261,25 @@ int train_mode(Options o, SynStore s){
 
         generate_primatives( s, o, primatives ); 
 
-        render_primatives( primatives );
+        printf("\nPrimatives\n");
+        for(int i = 0; i<num_prims; i+=3){
+            printf("%f %f %f\n",primatives[i],primatives[i+1],primatives[i+2]);
+        }
+
+        render_primatives( primatives, gl, num_prims );
         
         //cleanup
         free(d->data);
         free(d);
+#ifndef DEBUG
         printf( "\033[2J" );
         fflush( stdout );
         printf( "\033[%d;%dH", 1, 0 );
         printf("%f%%\n",(double)data/o->numdata*100);
         printf("%d of %d\n",data,o->numdata);
+#endif
     }
+    free( gl );
     return 0;
 }
 

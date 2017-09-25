@@ -1,12 +1,17 @@
 #ifndef DEEPNET_H
 #define DEEPNET_H
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 //structure to hold opengl uints
 typedef struct{
     unsigned int shader_program;
+    unsigned int VAO;
+    unsigned int VBO;
+    GLFWwindow* window;
 } Opengl_s;
 
 typedef Opengl_s* Opengl;
@@ -84,6 +89,6 @@ void import_brain( SynStore s, Options o );
 void generate_primatives( SynStore s, Options o, double primatives[] );
 
 //opengl render
-int init_opengl( Opengl gl );
-void render_primatives( double primatives[] );
+void* init_opengl( void* arg );
+void render_primatives( double primatives[], Opengl gl, int size );
 #endif
