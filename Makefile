@@ -4,6 +4,6 @@ CFLAGS = -Wall -Wextra -pedantic -lglfw -lGLEW -lGL -lX11 -lpthread -lXrandr -lX
 
 default: deepnet
 
-deepnet: deepnet.c dn_aux.c dn_math.c render.c deepnet.h
-	$(CC) $(CFLAGS) -o deepnet deepnet.c dn_aux.c dn_math.c render.c deepnet.h
+deepnet: deepnet.c dn_aux.c dn_math.c render.c render.h deepnet.h
+	$(CC) $(CFLAGS) -o deepnet deepnet.c dn_aux.c dn_math.c render.c deepnet.h render.h
 

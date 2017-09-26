@@ -1,6 +1,7 @@
 ///implimentations
 
 #include "deepnet.h"
+#include "render.h"
 #include <string.h>
 #include <ctype.h>
 #include <time.h>

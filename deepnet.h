@@ -1,20 +1,9 @@
 #ifndef DEEPNET_H
 #define DEEPNET_H
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-//structure to hold opengl uints
-typedef struct{
-    unsigned int shader_program;
-    unsigned int VAO;
-    unsigned int VBO;
-    GLFWwindow* window;
-} Opengl_s;
-
-typedef Opengl_s* Opengl;
+#include "render.h"
 
 //structure to hold parameter results
 typedef struct{
@@ -91,7 +80,4 @@ void generate_primatives( SynStore s, Options o, double primatives[] );
 //generate random colors for synapse streams
 void generate_colors( Options o, double primatives[] );
 
-//opengl render
-void* init_opengl( void* arg );
-void render_primatives( double primatives[], Opengl gl, int size );
 #endif
