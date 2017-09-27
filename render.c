@@ -1,6 +1,4 @@
-#define GLEW_STATIC
-
-#include "render.h"
+#include "deepnet.h"
 #include <stdio.h>
 #include <pthread.h>
 
@@ -9,26 +7,26 @@ void framebuffer_size_callback( GLFWwindow* window, int width, int height ) {
     glViewport( 0, 0, width, height );
 }
 
-void* init_opengl( void* arg ){
+void init_opengl( Opengl gl ){
     
-    Opengl gl = (Opengl_s *) arg;
-    //init
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    //create the window
-    gl->window = glfwCreateWindow( 1000, 1000, "Deepnet", NULL, NULL );
-    
-    glfwMakeContextCurrent( gl->window );
+    //required for OSX support
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+    gl->window = glfwCreateWindow( 1000, 1000, "Deepnet", NULL, NULL );
+    glfwMakeContextCurrent( gl->window );
+   
+    glewExperimental = GL_TRUE;
+    glewInit();
+ 
     glViewport( 0, 0, 1000, 1000 );
 
     glfwSetFramebufferSizeCallback( gl->window, framebuffer_size_callback );
-
-    glewInit();
-
+   
     //Init Shaders
     const char *vertexShaderSource = "#version 330 core\n"
          "layout (location = 0) in vec3 pos;\n"
@@ -81,19 +79,21 @@ void* init_opengl( void* arg ){
 #endif
     glDeleteShader( vertexShader );
     glDeleteShader( fragmentShader );
-    
+
     //set up objects
     glGenVertexArrays( 1, &gl->VAO );
+
     glGenBuffers( 1, &gl->VBO );
-    return NULL;
 }
 
 void render_primatives( double primatives[], Opengl gl, int size ){
     //fill up the VBO
     glBindVertexArray( gl->VAO );
+
     glBindBuffer( GL_ARRAY_BUFFER, gl->VBO );
-    glBufferData( GL_ARRAY_BUFFER, size, primatives, GL_DYNAMIC_DRAW );
-    //link the attribs //TODO: try setting to normalized
+    glBufferData( GL_ARRAY_BUFFER, size * sizeof( double ), primatives, GL_DYNAMIC_DRAW );
+    //link the attribs
+    
     glVertexAttribPointer( 0, 3, GL_DOUBLE, GL_FALSE, 6 * sizeof( double ), (void*)0 );
     glEnableVertexAttribArray( 0 );
     //colors
@@ -102,18 +102,22 @@ void render_primatives( double primatives[], Opengl gl, int size ){
     //unbind
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindVertexArray( 0 );
-
-    //glEnable(GL_DEPTH_TEST);
+    
+   // glEnable(GL_DEPTH_TEST);
     //render the synapse weights
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     glUseProgram( gl->shader_program );
+    
     glBindVertexArray( gl->VAO );
-    glDrawArrays( GL_TRIANGLES, 0, size );
+    glBindBuffer( GL_ARRAY_BUFFER, gl->VBO );
 
+    printf("%d\n", size);
+    glDrawArrays( GL_LINES, 0, size/6 );
+    
     //swap the buffers
     glfwSwapBuffers( gl->window );
     glfwPollEvents();
-
+    
 }

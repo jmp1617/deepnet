@@ -1,9 +1,26 @@
 #ifndef DEEPNET_H
 #define DEEPNET_H
+#define GLEW_STATIC
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "render.h"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+//structure to hold opengl uints
+typedef struct{
+    unsigned int shader_program;
+    unsigned int VAO;
+    unsigned int VBO;
+    GLFWwindow* window;
+} Opengl_s;
+                       
+typedef Opengl_s* Opengl;
+                    
+//opengl render
+void init_opengl( Opengl gl );
+void render_primatives( double primatives[], Opengl gl, int size );
 
 //structure to hold parameter results
 typedef struct{

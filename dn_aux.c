@@ -1,7 +1,6 @@
 ///implimentations
 
 #include "deepnet.h"
-#include "render.h"
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
@@ -116,7 +115,7 @@ int train_mode(Options o, SynStore s){
     Opengl gl = malloc( sizeof( Opengl_s ) );
     
     if( o->visualize > 0 )
-        init_opengl( (void*)gl );
+        init_opengl( gl );
     
     int num_prims = 4*(o->size-1)*6;
     double primatives[num_prims];
@@ -304,7 +303,7 @@ int train_mode(Options o, SynStore s){
         for( int space = 0; space < 100 - bars; space++ )
             printf(" ");
         printf("]\n");
-        //
+        
         printf("%f%%\n",(double)data/o->numdata*100);
         printf("%d of %d\n",data,o->numdata);
 #endif
