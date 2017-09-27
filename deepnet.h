@@ -11,7 +11,7 @@ typedef struct{
     int numdata;
     int size;
     char* file;
-    char visualize;
+    int visualize;
 } Options_s;
 
 typedef Options_s* Options;

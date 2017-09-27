@@ -13,7 +13,7 @@ void print_usage( void ){
             \t# data:  number of data for training or analysis\n \
             \tsize: the length of the largest data (including solution flag and length header if training).\n \
             \tneurons.brain: file to dump neurons to after training or load neurons for analysis\n \
-            \tvisualize: [y/n] opengl visualization of training (slower)\n" );
+            \tvisualize: [0 to # data] opengl visualization of training (slower). 0 to disable\n" );
 }
 
 int check_args( char* argv[] ){
@@ -59,9 +59,16 @@ int check_args( char* argv[] ){
         print_usage();
         return 1;
     }
-
-    if( strlen( argv[5] ) != 1 || !( argv[5][0] == 'y' || argv[5][0] == 'n' ) ){
-        fprintf( stderr, "Invalid mode: y (yes) or n (no)\n\n" );
+    //visualize
+    for( unsigned int c = 0; c < strlen( argv[5] ); c++ ){
+        if( !isdigit( argv[5][c] ) ){
+            fprintf( stderr, "visualize parameter must be a number greater than 0 and less than # data\n\n" );
+            print_usage();
+            return 1;
+        }
+    }
+    if( strtol( argv[5], NULL, 10 ) < 0 || strtol( argv[5], NULL, 10 ) > strtol( argv[2], NULL, 10 ) ){
+        fprintf( stderr, "Invalid number: must be 0 or greater and less then # data\n\n" );
         print_usage();
         return 1;
     }
@@ -108,7 +115,7 @@ int train_mode(Options o, SynStore s){
     
     Opengl gl = malloc( sizeof( Opengl_s ) );
     
-    if( o->visualize == 'y' )
+    if( o->visualize > 0 )
         init_opengl( (void*)gl );
     
     int num_prims = 4*(o->size-1)*6;
@@ -278,8 +285,9 @@ int train_mode(Options o, SynStore s){
                     primatives[i+3],primatives[i+4],primatives[i+5]);
         }
 #endif
-        if( o->visualize == 'y' )
-            render_primatives( primatives, gl, num_prims );
+        if( o->visualize > 0 )
+            if( (data % o->visualize) == 0 )
+                render_primatives( primatives, gl, num_prims );
         
         //cleanup
         free(d->data);
