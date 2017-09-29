@@ -2,7 +2,7 @@
 Multipurpose modular deep learning neural network with OpenGl visualization.<br />
 
 ## Dependencies
-GLFW G, OPENGL, GLEW<br />
+GLFW 3, OPENGL, GLEW.<br />
 
 ## Usage
 Usage: deepnet /[mode] /[# data] /[size] /[neurons.brain] /[visualize]<br />
