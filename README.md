@@ -19,3 +19,14 @@ Make targets: spec, line, and tri are available.<br />
 spec - Screen clear after each render. Just shows current synapse values.<br />
 line - OpenGL lines.<br />
 tri - OpenGL triangles.<br />
+
+# Images - Training 100000 interations
+ 
+## Default after 1.9%
+![Default](/images/default.png)
+## SPEC enabled after 3.3%
+![Spec](/images/spec.png)
+## LINE enabled after 2.1%
+![Line](/images/line.png)
+## TRI enabled after 1.7%
+![Tri](/images/tri.png)
