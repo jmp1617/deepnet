@@ -32,7 +32,7 @@ Primative coordinate system: ( x: synapse0, y: synapse1, z: synapse2 )
 Each colored trail is one layer0 -> layer1 synaptic weight.
 ## SPEC enabled after 3.3%
 ![Spec](/images/spec.png)<br />
-Each spec is one layer0 -> layer1 synaptic weight.
+Each dot is one layer0 -> layer1 synaptic weight.
 ## LINE enabled after 2.1%
 ![Line](/images/line.png)<br />
 Connect multiple synaptic weights with lines.
