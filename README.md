@@ -1,6 +1,9 @@
 # Deepnet
 Multipurpose modular deep learning neural network with OpenGl visualization.<br />
 
+Watch the neural net learn. Synaptic weight visualization with OpenGL allows the user to watch<br \>
+the neural net train.
+
 ## Dependencies
 GLFW 3, OPENGL, GLEW.<br />
 
@@ -20,7 +23,7 @@ spec - Screen clear after each render. Just shows current synapse values.<br />
 line - OpenGL lines.<br />
 tri - OpenGL triangles.<br />
 
-# Images - Training 100000 interations
+# Images - Training 100000 iterations
  
 ## Default after 1.9%
 ![Default](/images/default.png)
