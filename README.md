@@ -23,13 +23,19 @@ spec - Screen clear after each render. Just shows current synapse values.<br />
 line - OpenGL lines.<br />
 tri - OpenGL triangles.<br />
 
+Primative coordinate system: ( x: synapse0, y: synapse1, z: synapse2 )
+
 # Images - Training 100000 iterations
  
 ## Default after 1.9%
 ![Default](/images/default.png)
+Each colored trail is one layer0 -> layer1 synaptic weight.
 ## SPEC enabled after 3.3%
 ![Spec](/images/spec.png)
+Each spec is one layer0 -> layer1 synaptic weight.
 ## LINE enabled after 2.1%
 ![Line](/images/line.png)
+Connect multiple synaptic weights with lines.
 ## TRI enabled after 1.7%
 ![Tri](/images/tri.png)
+Connect multiple synaptic weights with triangles.
