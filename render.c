@@ -103,19 +103,33 @@ void render_primatives( double primatives[], Opengl gl, int size ){
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindVertexArray( 0 );
     
-   // glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     //render the synapse weights
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-    //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
+#ifdef SPEC
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+#endif
     glUseProgram( gl->shader_program );
     
     glBindVertexArray( gl->VAO );
     glBindBuffer( GL_ARRAY_BUFFER, gl->VBO );
 
     printf("%d\n", size);
+#ifndef LINE
+#ifndef TRI
+    //default
+    glDrawArrays( GL_POINTS, 0, size/6 );
+#endif
+#endif
+#ifdef LINE
+#ifndef TRI
     glDrawArrays( GL_LINES, 0, size/6 );
-    
+#endif
+#endif
+#ifdef TRI
+    glDrawArrays( GL_TRIANGLES, 0, size/6 );
+#endif
+
     //swap the buffers
     glfwSwapBuffers( gl->window );
     glfwPollEvents();
