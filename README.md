@@ -1,7 +1,7 @@
 # Deepnet
 Multipurpose modular deep learning neural network with OpenGl visualization.<br />
 
-Watch the neural net learn. Synaptic weight visualization with OpenGL allows the user to watch<br \>
+Watch the neural net learn. Synaptic weight visualization with OpenGL allows the user to watch<br />
 the neural net train.
 
 ## Dependencies
