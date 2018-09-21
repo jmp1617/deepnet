@@ -20,7 +20,7 @@ typedef Opengl_s* Opengl;
                     
 //opengl render
 void init_opengl( Opengl gl );
-void render_primatives( double primatives[], Opengl gl, int size );
+void render_primatives( double primatives[], Opengl gl, int size, int iteration );
 
 //structure to hold parameter results
 typedef struct{
@@ -29,6 +29,7 @@ typedef struct{
     int size;
     char* file;
     int visualize;
+    int rotate;
 } Options_s;
 
 typedef Options_s* Options;

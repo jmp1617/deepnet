@@ -7,7 +7,7 @@
 
 int main( int argc, char* argv[] ){
     
-    if( argc != 6){
+    if( argc != 7){
         fprintf( stderr, "Incorrect argument amount\n\n" );
         print_usage();
         return 1;
@@ -26,6 +26,7 @@ int main( int argc, char* argv[] ){
     o->file = malloc( sizeof( char ) * 50 );
     memcpy( o->file, argv[4], strlen( argv[4] ) + 1 );
     o->visualize = strtol( argv[5], NULL, 10 );
+    o->rotate = strtol( argv[6], NULL, 10 );
 
     //prepare synapse storage
     SynStore s = malloc( sizeof( SynStore_s ) );

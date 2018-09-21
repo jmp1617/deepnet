@@ -86,13 +86,14 @@ void init_opengl( Opengl gl ){
     glGenBuffers( 1, &gl->VBO );
 }
 
-void render_primatives( double primatives[], Opengl gl, int size ){
+void render_primatives( double primatives[], Opengl gl, int size, int iteration ){
     //fill up the VBO
     glBindVertexArray( gl->VAO );
 
     glBindBuffer( GL_ARRAY_BUFFER, gl->VBO );
     glBufferData( GL_ARRAY_BUFFER, size * sizeof( double ), primatives, GL_DYNAMIC_DRAW );
     //link the attribs
+    printf(">>>%d\n",iteration%360);
     
     glVertexAttribPointer( 0, 3, GL_DOUBLE, GL_FALSE, 6 * sizeof( double ), (void*)0 );
     glEnableVertexAttribArray( 0 );
@@ -103,6 +104,7 @@ void render_primatives( double primatives[], Opengl gl, int size ){
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindVertexArray( 0 );
     
+    glRotated((iteration%360),1,0,0);
     //glEnable(GL_DEPTH_TEST);
     //render the synapse weights
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
@@ -114,7 +116,6 @@ void render_primatives( double primatives[], Opengl gl, int size ){
     glBindVertexArray( gl->VAO );
     glBindBuffer( GL_ARRAY_BUFFER, gl->VBO );
 
-    printf("%d\n", size);
 #ifndef LINE
 #ifndef TRI
     //default

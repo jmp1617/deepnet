@@ -22,3 +22,6 @@ line: deepnet.c dn_aux.c dn_math.c render.c deepnet.h
 
 tri: deepnet.c dn_aux.c dn_math.c render.c deepnet.h
 	$(CC) $(CFLAGS) -DTRI deepnet.c dn_aux.c dn_math.c render.c deepnet.h
+
+clean:
+	rm -rf *.gch

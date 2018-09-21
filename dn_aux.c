@@ -7,12 +7,13 @@
 #include <pthread.h>
 
 void print_usage( void ){
-    fprintf( stderr, "Usage: deepnet [mode] [# data] [size] [neurons.brain] [visualize]\n \
+    fprintf( stderr, "Usage: deepnet [mode] [# data] [size] [neurons.brain] [visualize] [rotate]\n \
             \tmode: [t/a] either a 't' to specify training mode or 'a' to analyze\n \
             \t# data:  number of data for training or analysis\n \
             \tsize: the length of the largest data (including solution flag and length header if training).\n \
             \tneurons.brain: file to dump neurons to after training or load neurons for analysis\n \
-            \tvisualize: [0 to # data] opengl visualization of training (slower). 0 to disable\n" );
+            \tvisualize: [0 to # data] opengl visualization of training (slower). 0 to disable\n \
+            \trotate: [0 or 1] rotate the visualization in 3 dimentions\n" );
 }
 
 int check_args( char* argv[] ){
@@ -70,6 +71,19 @@ int check_args( char* argv[] ){
         fprintf( stderr, "Invalid number: must be 0 or greater and less then # data\n\n" );
         print_usage();
         return 1;
+    }
+
+    if( sizeof(argv[6])/sizeof(long) != 1 ){
+        fprintf( stderr, "Invalid choice: must be 0 or 1\n\n");
+        print_usage();
+        return 1;
+    }
+    else{
+        if( !(argv[6][0]=='1' || argv[6][0]=='0') ){
+            fprintf( stderr, "Invalid choice: must be 0 or 1\n\n");
+            print_usage();
+            return 1;
+        }
     }
 
     return 0;
@@ -284,9 +298,13 @@ int train_mode(Options o, SynStore s){
                     primatives[i+3],primatives[i+4],primatives[i+5]);
         }
 #endif
-        if( o->visualize > 0 )
+        int rotate_ammount = 0;
+        if( o->visualize > 0 ){
+            if( o->rotate )
+                rotate_ammount = data;
             if( (data % o->visualize) == 0 )
-                render_primatives( primatives, gl, num_prims );
+                render_primatives( primatives, gl, num_prims, rotate_ammount );
+        }
         
         //cleanup
         free(d->data);
