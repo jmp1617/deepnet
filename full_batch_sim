@@ -1,0 +1,2 @@
+#!/bin/sh
+for i in {1..100000}; do cat $1; done

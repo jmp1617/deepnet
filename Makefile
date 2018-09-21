@@ -12,16 +12,16 @@ endif
 default: deepnet
 
 deepnet: deepnet.c dn_aux.c dn_math.c render.c deepnet.h
-	$(CC) $(CFLAGS) deepnet.c dn_aux.c dn_math.c render.c deepnet.h
+	$(CC) -o deepnet $(CFLAGS) deepnet.c dn_aux.c dn_math.c render.c deepnet.h
 
 spec: deepnet.c dn_aux.c dn_math.c render.c deepnet.h
-	$(CC) $(CFLAGS) -DSPEC deepnet.c dn_aux.c dn_math.c render.c deepnet.h
+	$(CC) -o deepnet $(CFLAGS) -DSPEC deepnet.c dn_aux.c dn_math.c render.c deepnet.h
 
 line: deepnet.c dn_aux.c dn_math.c render.c deepnet.h
-	$(CC) $(CFLAGS) -DLINE deepnet.c dn_aux.c dn_math.c render.c deepnet.h
+	$(CC) -o deepnet $(CFLAGS) -DLINE deepnet.c dn_aux.c dn_math.c render.c deepnet.h
 
 tri: deepnet.c dn_aux.c dn_math.c render.c deepnet.h
-	$(CC) $(CFLAGS) -DTRI deepnet.c dn_aux.c dn_math.c render.c deepnet.h
+	$(CC) -o deepnet $(CFLAGS) -DTRI deepnet.c dn_aux.c dn_math.c render.c deepnet.h
 
 clean:
 	rm -rf *.gch
